@@ -3,659 +3,238 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>خلاصة | دليلك التفاعلي للأعشاب الطبية</title>
+  <title>خلاصة | دليلك الشامل للأعشاب الطبيعية</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --green-900: #1b3a2b; --green-700: #2d6a4f; --green-500: #40916c;
-      --green-300: #95d5b2; --green-100: #d8f3dc; --cream: #fefae0;
-      --sand: #f4f1de; --text: #1f2937; --text-light: #6b7280;
-      --white: #ffffff; --gold: #d4a373; --gold-light: #fef3c7;
-      --shadow: 0 10px 30px rgba(27, 58, 43, 0.08);
-      --shadow-hover: 0 15px 40px rgba(27, 58, 43, 0.15);
-      --radius: 16px; --transition: all 0.3s ease;
+      --green-100: #d8f3dc; --cream: #fefae0; --text: #1f2937;
+      --text-light: #6b7280; --white: #ffffff; --orange: #f59e0b;
+      --blue-100: #e0f2fe; --blue-700: #0369a1; --blue-900: #0c4a6e;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --radius: 20px; --transition: all 0.3s ease;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Tajawal', sans-serif; color: var(--text); background: var(--white); line-height: 1.7; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+    body { background: var(--cream); color: var(--text); line-height: 1.6; }
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 80px 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-    /* Header */
-    header {
-      position: fixed; top: 0; right: 0; left: 0;
-      background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
-      z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05);
-    }
-    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
-    .logo { font-size: 1.8rem; font-weight: 800; color: var(--green-700); display: flex; align-items: center; gap: 8px; }
-    .logo span { color: var(--green-500); }
-    .logo-icon { font-size: 1.6rem; }
+    .screen { display: none; padding: 40px 0; min-height: 100vh; }
+    .screen.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Hero */
-    .hero {
-      background: linear-gradient(135deg, var(--green-100) 0%, var(--cream) 100%);
-      text-align: center; padding: 160px 0 100px;
-    }
-    .hero h1 { font-size: 2.8rem; font-weight: 800; color: var(--green-900); margin-bottom: 16px; }
-    .hero h1 span { color: var(--green-500); }
-    .hero p { font-size: 1.2rem; color: var(--text-light); max-width: 600px; margin: 0 auto 40px; }
-
-    /* ✨ قسم الترويج الجديد ✨ */
-    .promo-section {
-      background: linear-gradient(135deg, #fefae0 0%, #f4f1de 100%);
-      padding: 60px 0;
-    }
-    .promo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-      margin-top: 20px;
-    }
-    .promo-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 30px 24px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      border-bottom: 4px solid var(--green-500);
-      position: relative;
-      overflow: hidden;
-    }
-    .promo-card::before {
-      content: '';
-      position: absolute;
-      top: -30px; left: -30px;
-      width: 80px; height: 80px;
-      background: var(--green-100);
-      border-radius: 50%;
-      opacity: 0.6;
-    }
-    .promo-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-hover);
-      border-bottom-color: var(--gold);
-    }
-    .promo-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      display: block;
-    }
-    .promo-card h3 {
-      font-size: 1.2rem;
-      color: var(--green-900);
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-    .promo-card p {
-      color: var(--text-light);
-      font-size: 0.95rem;
+    .hero { text-align: center; padding: 60px 20px 40px; }
+    .hero h1 { font-size: 2.5rem; color: var(--green-900); margin-bottom: 10px; }
+    .hero p { color: var(--text-light); font-size: 1.1rem; }
+    
+    .category-title {
+      font-size: 1.5rem; color: var(--green-900); margin: 40px 0 20px;
+      border-right: 5px solid var(--green-500); padding-right: 15px;
+      display: flex; align-items: center; gap: 10px;
     }
 
-    /* شريط الترويج العلوي */
-    .promo-bar {
-      background: linear-gradient(90deg, var(--green-700), var(--green-500));
-      color: var(--white);
-      text-align: center;
-      padding: 12px 20px;
-      font-weight: 500;
-      font-size: 0.95rem;
-      margin-top: 70px;
-    }
-    .promo-bar strong { color: var(--gold-light); }
-
-    /* Section Titles */
-    .section-title { text-align: center; margin-bottom: 50px; }
-    .section-title .subtitle { display: block; color: var(--green-500); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; text-transform: uppercase; font-size: 0.9rem; }
-    .section-title h2 { font-size: 2.2rem; font-weight: 800; color: var(--green-900); }
-
-    /* Disease Grid */
     .disease-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
     .disease-card {
-      background: var(--white); border: 2px solid #eef2ee; border-radius: var(--radius);
-      padding: 30px 20px; text-align: center; cursor: pointer;
-      transition: var(--transition); box-shadow: var(--shadow);
-      position: relative;
+      background: var(--white); padding: 25px 15px; border-radius: var(--radius);
+      text-align: center; cursor: pointer; box-shadow: var(--shadow);
+      transition: var(--transition); border: 2px solid transparent;
     }
-    .disease-card:hover, .disease-card.active {
-      border-color: var(--green-500); transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
-      background: linear-gradient(135deg, #ffffff, var(--green-100));
+    .disease-card:hover { transform: translateY(-5px); border-color: var(--green-500); }
+    .disease-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .disease-card h3 { color: var(--green-900); font-size: 1.1rem; }
+
+    .back-btn {
+      display: inline-block; background: var(--white); color: var(--green-700);
+      padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
+      box-shadow: var(--shadow); margin-bottom: 30px; border: none; font-size: 1rem;
     }
-    .disease-card .disease-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .disease-card h3 { font-size: 1.15rem; color: var(--green-700); font-weight: 700; }
+    .back-btn:hover { background: var(--green-100); }
+    
+    .disease-header { text-align: center; margin-bottom: 40px; }
+    .disease-header h1 { font-size: 2.5rem; color: var(--green-900); margin-bottom: 10px; }
+    .disease-header p { font-size: 1.1rem; color: var(--text-light); max-width: 700px; margin: 0 auto; }
 
-    /* Results Area */
-    #resultsArea { margin-top: 60px; display: none; }
-    #resultsArea.show { display: block; animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .results-header {
-      background: linear-gradient(135deg, var(--green-700), var(--green-900));
-      color: var(--white); padding: 30px;
-      border-radius: var(--radius); margin-bottom: 30px; text-align: center;
-      box-shadow: var(--shadow);
+    .herb-card {
+      background: var(--white); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); margin-bottom: 30px; display: flex; flex-direction: column;
     }
-    .results-header h2 { font-size: 1.8rem; margin-bottom: 8px; }
-    .results-header p { color: var(--green-300); font-size: 1.05rem; }
-
-    .remedy-card {
-      background: var(--white); border-radius: var(--radius);
-      padding: 30px; margin-bottom: 24px; box-shadow: var(--shadow);
-      border-right: 6px solid var(--green-500);
-      transition: var(--transition);
+    @media(min-width: 768px) { .herb-card { flex-direction: row; } }
+    
+    .herb-img-container {
+      width: 100%; height: 250px; background: #e5e7eb;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
     }
-    .remedy-card:hover { box-shadow: var(--shadow-hover); }
-    .remedy-card h3 { font-size: 1.5rem; color: var(--green-900); margin-bottom: 6px; }
-    .remedy-card .latin-name { font-style: italic; color: var(--text-light); margin-bottom: 20px; font-size: 0.9rem; }
-
-    .info-block { margin-bottom: 20px; }
-    .info-block h4 {
-      font-size: 1.05rem; color: var(--green-700); margin-bottom: 8px;
-      display: flex; align-items: center; gap: 8px;
+    .herb-img-container img { width: 100%; height: 100%; object-fit: cover; }
+    .img-placeholder {
+      text-align: center; color: var(--text-light); font-weight: bold; font-size: 1.1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      background: #f3f4f6; width: 100%; height: 100%; justify-content: center;
     }
-    .info-block p, .info-block ul { color: var(--text-light); font-size: 0.95rem; }
-    .info-block ul { padding-right: 20px; list-style: disc; }
-    .info-block ul li { margin-bottom: 4px; }
+    .img-placeholder span { font-size: 2.5rem; }
+    
+    @media(min-width: 768px) { .herb-img-container { width: 300px; height: auto; min-height: 250px; flex-shrink: 0; } }
 
-    .warning-block {
-      background: #fff7ed; border-right: 4px solid #f59e0b;
-      padding: 16px; border-radius: 8px; margin-top: 16px;
-    }
-    .warning-block h4 { color: #b45309; }
-    .warning-block p, .warning-block ul { color: #92400e; }
+    .herb-info { padding: 30px; flex: 1; }
+    .herb-info h2 { color: var(--green-700); font-size: 1.8rem; margin-bottom: 5px; }
+    .herb-info .latin { font-style: italic; color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px; display: block; }
+    
+    .section-title { color: var(--green-900); font-size: 1.1rem; margin-top: 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 800;}
+    .herb-info p, .herb-info ul { color: var(--text-light); font-size: 0.95rem; }
+    
+    .info-box { padding: 15px; border-radius: 8px; margin-top: 15px; }
+    .info-box h4 { margin-bottom: 5px; display: flex; align-items: center; gap: 5px;}
+    
+    .dosage-box { background: #f0fdf4; border-right: 4px solid var(--green-500); }
+    .dosage-box h4 { color: var(--green-700); }
+    .dosage-box p { color: var(--green-900); font-weight: bold; }
 
-    .dosage-tag {
-      display: inline-block; background: var(--green-100); color: var(--green-700);
-      padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.9rem;
-      margin-bottom: 16px;
-    }
+    .duration-box { background: var(--blue-100); border-right: 4px solid var(--blue-700); }
+    .duration-box h4 { color: var(--blue-700); }
+    .duration-box p { color: var(--blue-900); font-weight: bold; }
 
-    /* Footer */
-    footer { background: var(--green-900); color: #c9d8cf; padding: 30px 0; text-align: center; margin-top: 60px; }
-    footer .copyright { font-size: 0.9rem; }
+    .location-box { background: #f8fafc; border: 1px solid #e2e8f0; }
+    .location-box h4 { color: var(--green-700); }
+    .location-box p { margin-bottom: 5px; font-size: 0.9rem; color: var(--text); }
+    .location-box strong { color: var(--green-900); }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      .disease-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .disease-card { padding: 20px 12px; }
-      .disease-card .disease-icon { font-size: 2rem; }
-      .disease-card h3 { font-size: 1rem; }
-      .remedy-card { padding: 20px; }
-    }
+    .warning-box { background: #fff7ed; border-right: 4px solid var(--orange); }
+    .warning-box h4 { color: #b45309; }
+    .warning-box ul { color: #92400e; padding-right: 20px; list-style: disc; margin-top: 5px; }
+
+    footer { text-align: center; padding: 30px; color: var(--text-light); font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="container navbar">
-      <a href="#" class="logo"><span class="logo-icon">🌿</span>خلاصة<span>.</span></a>
+  <div id="home-screen" class="screen active">
+    <div class="container">
+      <div class="hero">
+        <h1>إيه اللي حاسس بيه؟</h1>
+        <p>دليلك الشامل لأفضل الأعشاب الطبيعية، الجرعات، ومدة العلاج.</p>
+      </div>
+      <div id="categoriesContainer"></div>
     </div>
-  </header>
-
-  <!-- شريط ترويجي علوي -->
-  <div class="promo-bar">
-    ✨ اكتشف قوة الطبيعة بأسلوب علمي — <strong>خلاصة</strong> دليلك الموثوق للأعشاب الطبية 🌿
+    <footer>© 2026 خلاصة. صُنع بحب من الحديقة إلى المعمل 🌿</footer>
   </div>
 
-  <section class="hero">
+  <div id="disease-screen" class="screen">
     <div class="container">
-      <h1>دليلك التفاعلي <span>للأعشاب الطبية</span></h1>
-      <p>اختر الحالة اللي بتعاني منها، وهنعرضلك الأعشاب المناسبة، الجرعات، التحذيرات، وكل المعلومات اللي تحتاجها.</p>
+      <button class="back-btn" onclick="goHome()">← رجوع للقائمة</button>
+      <div class="disease-header">
+        <h1 id="diseaseTitle"></h1>
+        <p id="diseaseDesc"></p>
+      </div>
+      <div id="remediesContainer"></div>
     </div>
-  </section>
+    <footer>© 2026 خلاصة. صُنع بحب من الحديقة إلى المعمل 🌿</footer>
+  </div>
 
-  <!-- ✨ قسم الترويج الجديد ✨ -->
-  <section class="promo-section">
-    <div class="container">
-      <div class="section-title">
-        <span class="subtitle">ليه خلاصة؟</span>
-        <h2>أكتر من مجرد موقع أعشاب</h2>
-      </div>
-      <div class="promo-grid">
-        <div class="promo-card">
-          <span class="promo-icon">🔬</span>
-          <h3>معلومات مبنية على العلم</h3>
-          <p>كل جرعة وكل تحذير مبني على دراسات ومراجع موثوقة، مش كلام منتديات.</p>
-        </div>
-        <div class="promo-card">
-          <span class="promo-icon">⚡</span>
-          <h3>نتائج فورية</h3>
-          <p>اضغط على الحالة اللي بتعاني منها، وهتلاقي كل حاجة قدامك في ثواني.</p>
-        </div>
-        <div class="promo-card">
-          <span class="promo-icon">🌿</span>
-          <h3>من الحديقة للمعمل</h3>
-          <p>أعشاب نزرعها ونحبها، بنشارك معاك خلاصة تجربتنا ومعرفتنا.</p>
-        </div>
-        <div class="promo-card">
-          <span class="promo-icon">🛡️</span>
-          <h3>التحذيرات أولاً</h3>
-          <p>بنحط قدامك المحاذير والتفاعلات الدوائية قبل أي حاجة — سلامتك أهم.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <div class="section-title">
-        <span class="subtitle">اختر الحالة</span>
-        <h2>إيه اللي بتعاني منه؟</h2>
-      </div>
-
-      <div class="disease-grid" id="diseaseGrid">
-        <!-- الأزرار هتتولد بالجافاسكريبت -->
-      </div>
-
-      <div id="resultsArea">
-        <div class="results-header">
-          <h2 id="resultsTitle"></h2>
-          <p id="resultsDesc"></p>
-        </div>
-        <div id="remediesContainer"></div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p class="copyright">© 2026 خلاصة. جميع الحقوق محفوظة. صُنع بحب من الحديقة إلى المعمل 🌿</p>
-    </div>
-  </footer>
-
+  <!-- ربط ملف البيانات -->
+  <script src="data.js"></script>
+  
   <script>
-    // ============================================================
-    // 1. قاعدة البيانات: الأمراض والأعشاب
-    // ============================================================
-    const healthConditions = [
-      {
-        id: 'cold',
-        name: 'نزلة برد',
-        icon: '🤧',
-        desc: 'عدوى فيروسية في الجهاز التنفسي العلوي، أعراضها: سيلان الأنف، العطس، التهاب الحلق، والتعب.',
-        remedies: [
-          {
-            name: 'البيلسان (Elderberry)',
-            latin: 'Sambucus nigra',
-            dosage: '15 مل شراب، 4 مرات يومياً لمدة 5 أيام (لعلاج الإنفلونزا).',
-            benefits: [
-              'قد يساعد في تقليل مدة وشدة أعراض البرد والإنفلونزا.',
-              'له خصائص مضادة للأكسدة.',
-              'يُستخدم تقليدياً لدعم الجهاز التنفسي.'
-            ],
-            warnings: [
-              'التوت واللحاء والأوراق غير المطبوخة سامة (تحتوي على سيانيد).',
-              'المستحضرات التجارية آمنة عادةً بالجرعات الموصى بها.',
-              'سلامة الاستخدام أثناء الحمل والرضاعة غير معروفة.',
-              'قد يسبب حساسية لمن لديهم حساسية من البيلسان.'
-            ]
-          },
-          {
-            name: 'إشنسا (Echinacea)',
-            latin: 'Echinacea purpurea',
-            dosage: '5 مل صبغة مخففة في ماء ساخن، 5 مرات يومياً (الأيام 1-3)، ثم 3 مرات يومياً (الأيام 4-10).',
-            benefits: [
-              'تساعد في تخفيف أعراض البرد والإنفلونزا.',
-              'تدعم جهاز المناعة.',
-              'تُستخدم تقليدياً لتقصير مدة نزلات البرد.'
-            ],
-            warnings: [
-              'يُمنع استخدامها في حالات أمراض المناعة الذاتية (مثل التصلب المتعدد) أو نقص المناعة (مثل HIV).',
-              'يُمنع استخدامها مع الأدوية المثبطة للمناعة.',
-              'قد تسبب ردود فعل تحسسية لدى الأشخاص المعرضين للحساسية (الربو، الأكزيما).',
-              'غير موصى بها للأطفال تحت 12 سنة.',
-              'لا تتجاوز الجرعة الموصى بها.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'fever',
-        name: 'سخونية (حمى)',
-        icon: '🌡️',
-        desc: 'ارتفاع في درجة حرارة الجسم فوق المعدل الطبيعي، وغالباً يكون رد فعل مناعي ضد عدوى.',
-        remedies: [
-          {
-            name: 'الزنجبيل (Ginger)',
-            latin: 'Zingiber officinale',
-            dosage: 'شاي: قطعة بحجم نصف بوصة من الزنجبيل الطازج مبشورة في ماء ساخن. أو كبسولة 250 مجم كل 6 ساعات (الجرعة اليومية 1000-1500 مجم).',
-            benefits: [
-              'له خصائص خافضة للحرارة (مضاد للحمى).',
-              'يساعد في تخفيف الالتهاب والألم.',
-              'يساعد في تهدئة المعدة والغثيان.'
-            ],
-            warnings: [
-              'قد يسبب حرقة في المعدة أو اضطراب في الهضم عند تناوله بكميات كبيرة.',
-              'قد يتفاعل مع أدوية سيولة الدم (مثل الوارفارين).',
-              'استشر الطبيب قبل استخدامه إذا كنت تتناول أدوية للضغط أو السكري.'
-            ]
-          },
-          {
-            name: 'الريحان (Basil)',
-            latin: 'Ocimum basilicum',
-            dosage: 'شاي: ملعقة صغيرة من أوراق الريحان المجففة في كوب ماء مغلي، تُنقع 5-10 دقائق.',
-            benefits: [
-              'يُستخدم تقليدياً كخافض للحرارة.',
-              'له خصائص مضادة للالتهاب والميكروبات.',
-              'يساعد في تهدئة السعال المصاحب للحمى.'
-            ],
-            warnings: [
-              'بذور الريحان عند نقعها في الماء تصبح مطاطية، ويجب شربها مع كمية كافية من الماء لتجنب انسداد الأمعاء.',
-              'استشر الطبيب قبل الاستخدام للحوامل والمرضعات.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'cough',
-        name: 'كحة والتهاب الحلق',
-        icon: '🗣️',
-        desc: 'تهيج في الحلق أو الممرات الهوائية، قد يكون جافاً أو مصحوباً ببلغم.',
-        remedies: [
-          {
-            name: 'الخطمي (Marshmallow)',
-            latin: 'Althaea officinalis',
-            dosage: 'شاي: 1.5-2 جرام من الجذر المجفف في 150 مل ماء مغلي، 1-3 مرات يومياً. أو شراب: 5 مل كل 3-4 ساعات (البالغين).',
-            benefits: [
-              'يعمل كملطف (Demulcent) يهدئ ويرطب الأغشية المخاطية في الحلق.',
-              'يساعد في تخفيف الكحة الجافة والتهاب الحلق.',
-              'يُستخدم تقليدياً لعلاج تهيج الفم والحلق.'
-            ],
-            warnings: [
-              'قد يسبب انخفاض في نسبة السكر في الدم، راقب مستويات السكر إذا كنت مصاباً بالسكري.',
-              'قد يتأخر في امتصاص الأدوية الأخرى، لذا خذه بفاصل ساعتين على الأقل عن أي دواء.',
-              'تجنبه إذا كنت تعاني من انسداد في الأمعاء.'
-            ]
-          },
-          {
-            name: 'الزعتر (Thyme)',
-            latin: 'Thymus vulgaris',
-            dosage: 'شاي: ملعقة صغيرة من أوراق الزعتر المجففة في كوب ماء مغلي، تُنقع 5-10 دقائق، 1-3 مرات يومياً.',
-            benefits: [
-              'يساعد في طرد البلغم (Expectorant).',
-              'له خصائص مضادة للميكروبات ومضادة للتشنج.',
-              'يُستخدم تقليدياً لعلاج السعال والتهاب الشعب الهوائية.'
-            ],
-            warnings: [
-              'الزيت العطري المركز سام ويجب عدم تناوله عن طريق الفم.',
-              'قد يسبب تهيجاً للجلد والأغشية المخاطية عند استخدامه موضعياً بتركيز عالٍ.',
-              'تجنبه إذا كنت تعاني من فرط نشاط الغدة الدرقية.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'headache',
-        name: 'صداع',
-        icon: '🤕',
-        desc: 'ألم في الرأس قد يكون خفيفاً أو شديداً، وقد يكون صداعاً عصبياً أو نصفيًا.',
-        remedies: [
-          {
-            name: 'أقحوان الحمى (Feverfew)',
-            latin: 'Tanacetum parthenium',
-            dosage: 'الدراسات تستخدم غالباً 50-150 مجم من مسحوق الأوراق المجففة يومياً، أو مستخلص موحد.',
-            benefits: [
-              'أظهرت مراجعة منهجية وتحليل تلوي حديث (2025) أن الأقحوان يقلل بشكل كبير من تكرار نوبات الصداع النصفي.',
-              'قد يقلل من مدة نوبات الصداع النصفي.',
-              'يُستخدم تقليدياً للوقاية من الصداع النصفي.'
-            ],
-            warnings: [
-              'قد يسبب التهاب الفم أو تقرحات في الفم (خاصة مع الأوراق الطازجة).',
-              'قد يتفاعل مع أدوية سيولة الدم.',
-              'لا يُنصح به للحوامل أو المرضعات.',
-              'قد يسبب اضطراباً في المعدة.'
-            ]
-          },
-          {
-            name: 'زيت النعناع (Peppermint Oil)',
-            latin: 'Mentha piperita',
-            dosage: 'للصداع التوتري: دلك كمية صغيرة (قطرتين) من زيت النعناع المخفف على الصدغين والجبهة. لا تستخدمه قرب العينين.',
-            benefits: [
-              'قد يساعد في تخفيف الصداع التوتري والصداع النصفي عند تطبيقه موضعياً.',
-              'له خصائص مضادة للتشنج ومسكنة.',
-              'يعمل عن طريق تحفيز قنوات الكاتيون.'
-            ],
-            warnings: [
-              'لا تتناول زيت النعناع العطري عن طريق الفم (سام).',
-              'لا تستخدمه على الوجه أو الصدر للأطفال الرضع والأطفال الصغار (قد يسبب توقف التنفس).',
-              'قد يسبب تهيجاً للجلد عند استخدامه بتركيز عالٍ.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'digestive',
-        name: 'عسر هضم وانتفاخ',
-        icon: '🫃',
-        desc: 'عدم راحة في المعدة، شعور بالامتلاء، غازات، أو حرقة بعد الأكل.',
-        remedies: [
-          {
-            name: 'النعناع (Peppermint)',
-            latin: 'Mentha piperita',
-            dosage: 'شاي: ملعقة صغيرة من أوراق النعناع المجففة في كوب ماء مغلي، تُنقع 5-10 دقائق بعد الأكل. أو كبسولة زيت نعناع معوي 0.2 مل، 3 مرات يومياً قبل الأكل.',
-            benefits: [
-              'يساعد في تخفيف عسر الهضم والانتفاخ والغازات.',
-              'له تأثير مضاد للتشنج على عضلات الجهاز الهضمي.',
-              'يساعد في تهدئة المعدة.'
-            ],
-            warnings: [
-              'قد يسبب حرقة في المعدة أو ارتجاع الحمض (لأنه يرخي صمام المعدة).',
-              'تجنبه إذا كنت تعاني من ارتجاع المريء (GERD).',
-              'زيت النعناع المركز قد يسبب حرقان في الشرج.'
-            ]
-          },
-          {
-            name: 'الشمر (Fennel)',
-            latin: 'Foeniculum vulgare',
-            dosage: 'شاي: ملعقة صغيرة من بذور الشمر في كوب ماء مغلي، تُنقع 10-15 دقيقة، 1-3 مرات يومياً بعد الأكل.',
-            benefits: [
-              'يساعد في طرد الغازات (Carminative) وتخفيف الانتفاخ.',
-              'له خصائص مضادة للتشنج.',
-              'يساعد في تحسين الهضم.'
-            ],
-            warnings: [
-              'زيت الشمر المركز قد يسبب نوبات صرع، تجنب استخدامه بجرعات عالية.',
-              'قد يسبب ردود فعل تحسسية لدى الأشخاص الذين لديهم حساسية من الكرفس أو الجزر.',
-              'استشر الطبيب قبل استخدامه للأطفال الرضع.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'insomnia',
-        name: 'أرق وصعوبة نوم',
-        icon: '😴',
-        desc: 'صعوبة في الدخول في النوم أو الاستمرار فيه، أو نوم غير مريح.',
-        remedies: [
-          {
-            name: 'البابونج (Chamomile)',
-            latin: 'Matricaria chamomilla',
-            dosage: 'شاي: 1 جرام من زهور البابونج المجففة في كوب ماء مغلي، تُنقع 10 دقائق، قبل النوم. (دراسة استخدمت 1 جرام يومياً لمدة 8 أسابيع).',
-            benefits: [
-              'أظهرت دراسة (2025) أن شاي البابونج فعال في تحسين جودة النوم وتقليل الأرق.',
-              'يساعد في تقليل التوتر والقلق.',
-              'يساعد في زيادة إنتاج الميلاتونين.'
-            ],
-            warnings: [
-              'قد يسبب حساسية لدى الأشخاص الذين لديهم حساسية من عائلة النباتات النجمية (Asteraceae) مثل عباد الشمس والأقحوان.',
-              'قد يتفاعل مع أدوية سيولة الدم (يحتوي على الكومارين).',
-              'قد يسبب النعاس، لا تقم بأنشطة تتطلب تركيزاً بعد تناوله.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'constipation',
-        name: 'إمساك',
-        icon: '🚽',
-        desc: 'صعوبة في التبرز أو قلة عدد مرات التبرز (أقل من 3 مرات في الأسبوع).',
-        remedies: [
-          {
-            name: 'سنامكي (Senna)',
-            latin: 'Senna alexandrina',
-            dosage: 'للاستخدام قصير المدى فقط: 1-2 كبسولة (تحتوي على 100 مجم من أوراق السنامكي) قبل النوم، أو شاي: 0.5-2 جرام من الأوراق في كوب ماء.',
-            benefits: [
-              'ملين منبه فعال قصير المدى للإمساك.',
-              'يساعد في تحفيز حركة الأمعاء.',
-              'يُستخدم في المستحضرات العشبية التجارية للإمساك.'
-            ],
-            warnings: [
-              'للاستخدام قصير المدى فقط (لا يزيد عن أسبوع).',
-              'قد يسبب تقلصات في البطن، إسهال، أو تغير لون البول.',
-              'لا تستخدمه إذا كنت تعاني من التهاب الزائدة الدودية أو انسداد الأمعاء أو التهاب القولون التقرحي.',
-              'لا تستخدمه أثناء الحمل أو الرضاعة إلا باستشارة الطبيب.',
-              'الاستخدام المطول قد يسبب الاعتماد عليه وتلف الكبد.'
-            ]
-          },
-          {
-            name: 'بزر قطونا (Ispaghula/Psyllium)',
-            latin: 'Plantago ovata',
-            dosage: '2.6-5.2 جرام من بذور بزر قطونا (أو مسحوق القشور) مع كمية كبيرة من الماء (كوبين على الأقل)، مرة أو مرتين يومياً.',
-            benefits: [
-              'ملين مكون من الألياف الطبيعية يعمل على زيادة حجم البراز وتليينه.',
-              'يساعد في تنظيم حركة الأمعاء.',
-              'آمن للاستخدام لفترات أطول من السنامكي.'
-            ],
-            warnings: [
-              'يجب تناوله مع كمية كبيرة من الماء (على الأقل 250 مل لكل جرعة)، وإلا قد يسبب انسداداً في المريء أو الأمعاء.',
-              'لا تتناوله قبل النوم مباشرة.',
-              'قد يسبب انتفاخاً أو غازات في البداية.',
-              'قد يقلل من امتصاص بعض الأدوية، خذه بفاصل ساعتين على الأقل.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'uti',
-        name: 'التهاب مسالك بولية',
-        icon: '💧',
-        desc: 'عدوى في المسالك البولية تسبب حرقة أثناء التبول، تكرار التبول، وألم في أسفل البطن.',
-        remedies: [
-          {
-            name: 'عنبية الدب (Bearberry/Uva Ursi)',
-            latin: 'Arctostaphylos uva-ursi',
-            dosage: 'مستخلص يحتوي على 300 مجم، مرة واحدة يومياً بعد الأكل (للوقاية) أو مرتين يومياً (للحالات الحادة، لمدة لا تزيد عن 15 يوم).',
-            benefits: [
-              'يحتوي على الأربوتين، الذي له خصائص مطهرة ومدرة للبول.',
-              'يساعد في مكافحة البكتيريا المسببة لالتهاب المسالك البولية.',
-              'يُستخدم تقليدياً لعلاج التهاب المثانة.'
-            ],
-            warnings: [
-              'يجب استخدامه لفترة قصيرة فقط (لا يزيد عن 15 يوم).',
-              'لا تستخدمه أثناء الحمل أو الرضاعة.',
-              'قد يغير لون البول إلى اللون الأخضر أو البني الداكن.',
-              'قد يسبب اضطراباً في المعدة.',
-              'تجنبه إذا كنت تعاني من أمراض الكلى.'
-            ]
-          },
-          {
-            name: 'التوت البري (Cranberry)',
-            latin: 'Vaccinium macrocarpon',
-            dosage: 'للوقاية من التهابات المسالك البولية المتكررة: 36 مجم من البروأنثوسيانيدين (PAC) يومياً، أو 150-505 مجم من مسحوق التوت البري 1-3 مرات يومياً.',
-            benefits: [
-              'يساعد في منع التصاق البكتيريا بجدار المسالك البولية.',
-              'يوصي به الاتحاد الأمريكي لجراحة المسالك البولية (AUA) للوقاية من التهابات المسالك البولية المتكررة.',
-              'غني بمضادات الأكسدة وفيتامين C.'
-            ],
-            warnings: [
-              'لا يعالج العدوى النشطة، بل يساعد في الوقاية منها.',
-              'قد يتفاعل مع أدوية سيولة الدم (الوارفارين).',
-              'عصير التوت البري قد يحتوي على سكر مضاف، اختر الأنواع غير المحلاة.',
-              'قد يسبب اضطراباً في المعدة أو إسهالاً عند تناوله بكميات كبيرة.'
-            ]
-          }
-        ]
-      },
-      {
-        id: 'diarrhea',
-        name: 'إسهال',
-        icon: '🚻',
-        desc: 'براز رخو أو مائي متكرر، قد يكون مصحوباً بتقلصات في البطن.',
-        remedies: [
-          {
-            name: 'الشبت (Dill)',
-            latin: 'Anethum graveolens',
-            dosage: 'شاي: ملعقة صغيرة من بذور الشبت في كوب ماء مغلي، تُنقع 10 دقائق، 2-3 مرات يومياً.',
-            benefits: [
-              'أظهرت دراسة (2024) أن مستخلص ثمار الشبت له تأثير مضاد للإسهال.',
-              'له خصائص مضادة للالتهاب ومضادة للأكسدة.',
-              'يساعد في تهدئة تقلصات البطن.'
-            ],
-            warnings: [
-              'قد يسبب ردود فعل تحسسية لدى الأشخاص الذين لديهم حساسية من النباتات الخيمية (مثل الكرفس والشمر).',
-              'استشر الطبيب قبل الاستخدام للأطفال الصغار.'
-            ]
-          }
-        ]
-      }
-    ];
-
-    // ============================================================
-    // 2. توليد أزرار الأمراض
-    // ============================================================
-    const diseaseGrid = document.getElementById('diseaseGrid');
-    const resultsArea = document.getElementById('resultsArea');
-    const resultsTitle = document.getElementById('resultsTitle');
-    const resultsDesc = document.getElementById('resultsDesc');
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const homeScreen = document.getElementById('home-screen');
+    const diseaseScreen = document.getElementById('disease-screen');
+    const diseaseTitle = document.getElementById('diseaseTitle');
+    const diseaseDesc = document.getElementById('diseaseDesc');
     const remediesContainer = document.getElementById('remediesContainer');
 
+    const groupedConditions = {};
     healthConditions.forEach(condition => {
-      const card = document.createElement('div');
-      card.className = 'disease-card';
-      card.dataset.id = condition.id;
-      card.innerHTML = `
-        <div class="disease-icon">${condition.icon}</div>
-        <h3>${condition.name}</h3>
-      `;
-      card.addEventListener('click', () => showRemedies(condition));
-      diseaseGrid.appendChild(card);
+      if (!groupedConditions[condition.category]) {
+        groupedConditions[condition.category] = [];
+      }
+      groupedConditions[condition.category].push(condition);
     });
 
-    // ============================================================
-    // 3. عرض الأعشاب عند اختيار المرض
-    // ============================================================
-    function showRemedies(condition) {
-      document.querySelectorAll('.disease-card').forEach(c => c.classList.remove('active'));
-      const activeCard = document.querySelector(`.disease-card[data-id="${condition.id}"]`);
-      if (activeCard) activeCard.classList.add('active');
+    for (const category in groupedConditions) {
+      const catTitle = document.createElement('h2');
+      catTitle.className = 'category-title';
+      catTitle.innerHTML = `🌿 ${category}`;
+      categoriesContainer.appendChild(catTitle);
 
-      resultsTitle.textContent = condition.name;
-      resultsDesc.textContent = condition.desc;
+      const grid = document.createElement('div');
+      grid.className = 'disease-grid';
 
+      groupedConditions[category].forEach(condition => {
+        const card = document.createElement('div');
+        card.className = 'disease-card';
+        card.innerHTML = `
+          <div class="icon">${condition.icon}</div>
+          <h3>${condition.name}</h3>
+        `;
+        card.onclick = () => showDisease(condition);
+        grid.appendChild(card);
+      });
+
+      categoriesContainer.appendChild(grid);
+    }
+
+    function showDisease(condition) {
+      diseaseTitle.textContent = condition.name;
+      diseaseDesc.textContent = condition.desc;
+      
       remediesContainer.innerHTML = '';
       condition.remedies.forEach(remedy => {
         const card = document.createElement('div');
-        card.className = 'remedy-card';
+        card.className = 'herb-card';
+        
+        const placeholder = `<div class="img-placeholder"><span>📸</span>مكان مخصص لصورة<br>${remedy.name}</div>`;
+        
         card.innerHTML = `
-          <h3>${remedy.name}</h3>
-          <p class="latin-name">${remedy.latin}</p>
-          <span class="dosage-tag">💊 ${remedy.dosage}</span>
-
-          <div class="info-block">
-            <h4>✅ الفوائد والاستخدامات</h4>
-            <ul>${remedy.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
+          <div class="herb-img-container">
+            <img src="${remedy.img}" alt="${remedy.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${placeholder}';">
           </div>
+          <div class="herb-info">
+            <h2>${remedy.name}</h2>
+            <span class="latin">${remedy.latin}</span>
+            
+            <div class="section-title">💡 إزاي بيعالج؟</div>
+            <p>${remedy.how}</p>
+            
+            <div class="info-box dosage-box">
+              <h4>☕ الجرعة والاستخدام</h4>
+              <p>${remedy.dosage}</p>
+            </div>
 
-          <div class="warning-block">
-            <h4>⚠️ تحذيرات ومحاذير</h4>
-            <ul>${remedy.warnings.map(w => `<li>${w}</li>`).join('')}</ul>
+            <div class="info-box duration-box">
+              <h4>⏳ مدة العلاج المتوقعة</h4>
+              <p>${remedy.duration}</p>
+            </div>
+
+            <div class="info-box location-box">
+              <h4>📍 أماكن الزراعة والتوفر</h4>
+              <p><strong>🌍 الدول المشهورة:</strong> ${remedy.location.world}</p>
+              <p><strong>🇪🇬 في مصر:</strong> ${remedy.location.egypt}</p>
+              <p><strong>🛒 هتلاقيها فين:</strong> ${remedy.location.where}</p>
+            </div>
+            
+            <div class="info-box warning-box">
+              <h4>⚠️ تحذيرات مهمة</h4>
+              <ul>${remedy.warnings.map(w => `<li>${w}</li>`).join('')}</ul>
+            </div>
           </div>
         `;
         remediesContainer.appendChild(card);
       });
 
-      resultsArea.classList.add('show');
-      resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      homeScreen.classList.remove('active');
+      diseaseScreen.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function goHome() {
+      diseaseScreen.classList.remove('active');
+      homeScreen.classList.add('active');
+      window.scrollTo(0, 0);
     }
   </script>
 
