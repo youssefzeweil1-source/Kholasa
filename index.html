@@ -3,140 +3,221 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>خلاصة | دليلك الشامل للأعشاب الطبيعية</title>
+  <title>خلاصة | دليلك الذكي للأعشاب الطبيعية</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --green-900: #1b3a2b; --green-700: #2d6a4f; --green-500: #40916c;
-      --green-100: #d8f3dc; --cream: #fefae0; --text: #1f2937;
-      --text-light: #6b7280; --white: #ffffff; --orange: #f59e0b;
-      --blue-100: #e0f2fe; --blue-700: #0369a1; --blue-900: #0c4a6e;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
-      --radius: 20px; --transition: all 0.3s ease;
+      --primary: #059669;
+      --primary-light: #10b981;
+      --primary-glow: rgba(16, 185, 129, 0.2);
+      --bg-color: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #f59e0b;
+      --accent-bg: #fffbeb;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      --shadow-lg: 0 20px 40px -10px rgba(5, 150, 105, 0.15);
+      
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-    body { background: var(--cream); color: var(--text); line-height: 1.6; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+    
+    body { 
+      background-color: var(--bg-color); 
+      color: var(--text-main); 
+      line-height: 1.7; 
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      z-index: 1000;
+      padding: 15px 20px;
+      display: flex; justify-content: center; align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .logo {
+      font-size: 1.8rem; font-weight: 900; color: var(--primary);
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); font-size: 2rem; }
+
+    .screen { display: none; padding-top: 100px; padding-bottom: 50px; min-height: 100vh; }
+    .screen.active { display: block; animation: fadeUp 0.5s ease-out; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-    .screen { display: none; padding: 40px 0; min-height: 100vh; }
-    .screen.active { display: block; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .hero { text-align: center; padding: 40px 20px 60px; position: relative; }
+    .hero::before {
+      content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+      z-index: -1;
+    }
+    .hero h1 { 
+      font-size: 3rem; font-weight: 900; line-height: 1.3; margin-bottom: 15px; 
+      background: linear-gradient(135deg, var(--primary), #047857);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 600; }
 
-    .hero { text-align: center; padding: 60px 20px 40px; }
-    .hero h1 { font-size: 2.5rem; color: var(--green-900); margin-bottom: 10px; }
-    .hero p { color: var(--text-light); font-size: 1.1rem; }
-    
     .category-title {
-      font-size: 1.5rem; color: var(--green-900); margin: 40px 0 20px;
-      border-right: 5px solid var(--green-500); padding-right: 15px;
-      display: flex; align-items: center; gap: 10px;
+      font-size: 1.6rem; font-weight: 800; color: var(--text-main);
+      margin: 50px 0 25px; display: flex; align-items: center; gap: 12px;
+    }
+    .category-title::before {
+      content: ''; display: block; width: 6px; height: 30px;
+      background: var(--primary); border-radius: 10px;
     }
 
     .disease-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
     }
     .disease-card {
-      background: var(--white); padding: 25px 15px; border-radius: var(--radius);
-      text-align: center; cursor: pointer; box-shadow: var(--shadow);
-      transition: var(--transition); border: 2px solid transparent;
+      background: var(--surface); border-radius: var(--radius-md); padding: 30px 20px;
+      text-align: center; cursor: pointer;
+      box-shadow: var(--shadow-md); border: 1px solid #f1f5f9;
+      transition: var(--transition); position: relative; overflow: hidden;
     }
-    .disease-card:hover { transform: translateY(-5px); border-color: var(--green-500); }
-    .disease-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
-    .disease-card h3 { color: var(--green-900); font-size: 1.1rem; }
+    .disease-card::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+      transform: skewX(-25deg); transition: 0.7s;
+    }
+    .disease-card:hover::before { left: 200%; }
+    .disease-card:hover { 
+      transform: translateY(-8px); 
+      box-shadow: var(--shadow-lg); 
+      border-color: var(--primary-light);
+    }
+    .disease-card .icon { 
+      font-size: 3rem; margin-bottom: 15px; display: inline-block;
+      background: var(--bg-color); width: 80px; height: 80px; line-height: 80px;
+      border-radius: 50%; transition: var(--transition);
+    }
+    .disease-card:hover .icon { transform: scale(1.1); background: var(--primary-glow); }
+    .disease-card h3 { color: var(--text-main); font-size: 1.2rem; font-weight: 700; }
 
     .back-btn {
-      display: inline-block; background: var(--white); color: var(--green-700);
-      padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
-      box-shadow: var(--shadow); margin-bottom: 30px; border: none; font-size: 1rem;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); color: var(--primary); padding: 12px 24px;
+      border-radius: 50px; font-weight: 700; cursor: pointer; border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow-sm); margin-bottom: 30px; transition: var(--transition);
     }
-    .back-btn:hover { background: var(--green-100); }
+    .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateX(5px); }
     
-    .disease-header { text-align: center; margin-bottom: 40px; }
-    .disease-header h1 { font-size: 2.5rem; color: var(--green-900); margin-bottom: 10px; }
-    .disease-header p { font-size: 1.1rem; color: var(--text-light); max-width: 700px; margin: 0 auto; }
+    .disease-header { text-align: center; margin-bottom: 50px; }
+    .disease-header h1 { font-size: 2.8rem; font-weight: 900; color: var(--text-main); margin-bottom: 15px; }
+    .disease-header p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; font-weight: 600; }
 
     .herb-card {
-      background: var(--white); border-radius: var(--radius); overflow: hidden;
-      box-shadow: var(--shadow); margin-bottom: 30px; display: flex; flex-direction: column;
+      background: var(--surface); border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-md); margin-bottom: 40px; display: flex; flex-direction: column;
+      border: 1px solid #f1f5f9; transition: var(--transition);
     }
-    @media(min-width: 768px) { .herb-card { flex-direction: row; } }
+    .herb-card:hover { box-shadow: var(--shadow-lg); }
+    
+    @media(min-width: 768px) { 
+      .herb-card { flex-direction: row; align-items: stretch; } 
+    }
     
     .herb-img-container {
-      width: 100%; height: 250px; background: #e5e7eb;
+      width: 100%; height: 300px; background: linear-gradient(135deg, var(--bg-color), #e2e8f0);
       display: flex; align-items: center; justify-content: center;
-      overflow: hidden; position: relative;
+      overflow: hidden; position: relative; border-bottom: 1px solid #f1f5f9;
     }
-    .herb-img-container img { width: 100%; height: 100%; object-fit: cover; }
+    .herb-img-container img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+    .herb-card:hover .herb-img-container img { transform: scale(1.05); }
+    
     .img-placeholder {
-      text-align: center; color: var(--text-light); font-weight: bold; font-size: 1.1rem;
+      text-align: center; color: var(--primary); font-weight: 800; font-size: 1.1rem;
       display: flex; flex-direction: column; align-items: center; gap: 10px;
-      background: #f3f4f6; width: 100%; height: 100%; justify-content: center;
+      width: 100%; height: 100%; justify-content: center;
     }
-    .img-placeholder span { font-size: 2.5rem; }
+    .img-placeholder span { font-size: 3.5rem; }
     
-    @media(min-width: 768px) { .herb-img-container { width: 300px; height: auto; min-height: 250px; flex-shrink: 0; } }
+    @media(min-width: 768px) { 
+      .herb-img-container { width: 350px; height: auto; min-height: 350px; flex-shrink: 0; border-bottom: none; border-left: 1px solid #f1f5f9; } 
+    }
 
-    .herb-info { padding: 30px; flex: 1; }
-    .herb-info h2 { color: var(--green-700); font-size: 1.8rem; margin-bottom: 5px; }
-    .herb-info .latin { font-style: italic; color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px; display: block; }
+    .herb-info { padding: 35px; flex: 1; }
+    .herb-info h2 { color: var(--primary); font-size: 2rem; font-weight: 800; margin-bottom: 5px; }
+    .herb-info .latin { font-style: italic; color: var(--text-muted); font-size: 1rem; margin-bottom: 25px; display: block; font-weight: 600; }
     
-    .section-title { color: var(--green-900); font-size: 1.1rem; margin-top: 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 800;}
-    .herb-info p, .herb-info ul { color: var(--text-light); font-size: 0.95rem; }
+    .section-title { color: var(--text-main); font-size: 1.2rem; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-weight: 800;}
+    .herb-info p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; line-height: 1.8; }
     
-    .info-box { padding: 15px; border-radius: 8px; margin-top: 15px; }
-    .info-box h4 { margin-bottom: 5px; display: flex; align-items: center; gap: 5px;}
+    .info-box { padding: 20px; border-radius: var(--radius-md); margin-top: 20px; }
+    .info-box h4 { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 800;}
     
-    .dosage-box { background: #f0fdf4; border-right: 4px solid var(--green-500); }
-    .dosage-box h4 { color: var(--green-700); }
-    .dosage-box p { color: var(--green-900); font-weight: bold; }
+    .dosage-box { background: #ecfdf5; border-right: 5px solid var(--primary); }
+    .dosage-box h4 { color: var(--primary); }
+    .dosage-box p { color: #064e3b; font-weight: 700; }
 
-    .duration-box { background: var(--blue-100); border-right: 4px solid var(--blue-700); }
-    .duration-box h4 { color: var(--blue-700); }
-    .duration-box p { color: var(--blue-900); font-weight: bold; }
+    .duration-box { background: #eff6ff; border-right: 5px solid #3b82f6; }
+    .duration-box h4 { color: #2563eb; }
+    .duration-box p { color: #1e3a8a; font-weight: 700; }
 
     .location-box { background: #f8fafc; border: 1px solid #e2e8f0; }
-    .location-box h4 { color: var(--green-700); }
-    .location-box p { margin-bottom: 5px; font-size: 0.9rem; color: var(--text); }
-    .location-box strong { color: var(--green-900); }
+    .location-box h4 { color: var(--text-main); }
+    .location-box p { margin-bottom: 8px; font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+    .location-box strong { color: var(--text-main); font-weight: 800; }
 
-    .warning-box { background: #fff7ed; border-right: 4px solid var(--orange); }
+    .warning-box { background: var(--accent-bg); border-right: 5px solid var(--accent); }
     .warning-box h4 { color: #b45309; }
-    .warning-box ul { color: #92400e; padding-right: 20px; list-style: disc; margin-top: 5px; }
+    .warning-box ul { color: #92400e; padding-right: 20px; list-style: disc; margin-top: 8px; font-weight: 600; font-size: 0.95rem; }
+    .warning-box ul li { margin-bottom: 5px; }
 
-    footer { text-align: center; padding: 30px; color: var(--text-light); font-size: 0.9rem; }
+    footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; }
   </style>
 </head>
 <body>
+
+  <header>
+    <div class="logo"><span>🌿</span> خلاصة</div>
+  </header>
 
   <div id="home-screen" class="screen active">
     <div class="container">
       <div class="hero">
         <h1>إيه اللي حاسس بيه؟</h1>
-        <p>دليلك الشامل لأفضل الأعشاب الطبيعية، الجرعات، ومدة العلاج.</p>
+        <p>دليلك الذكي لأفضل الأعشاب الطبيعية، الجرعات، ومدة العلاج. اختار حالتك من التصنيفات اللي تحت.</p>
       </div>
       <div id="categoriesContainer"></div>
     </div>
-    <footer>© 2026 خلاصة. صُنع بحب من الحديقة إلى المعمل 🌿</footer>
+    <!-- تعديل الحقوق هنا -->
+    <footer>جميع حقوق الطبع والنشر محفوظة &copy; خلاصة 2026 🌿</footer>
   </div>
 
   <div id="disease-screen" class="screen">
     <div class="container">
-      <button class="back-btn" onclick="goHome()">← رجوع للقائمة</button>
+      <button class="back-btn" onclick="goHome()"><span>←</span> رجوع للقائمة</button>
       <div class="disease-header">
         <h1 id="diseaseTitle"></h1>
         <p id="diseaseDesc"></p>
       </div>
       <div id="remediesContainer"></div>
     </div>
-    <footer>© 2026 خلاصة. صُنع بحب من الحديقة إلى المعمل 🌿</footer>
+    <!-- تعديل الحقوق هنا -->
+    <footer>جميع حقوق الطبع والنشر محفوظة &copy; خلاصة 2026 🌿</footer>
   </div>
 
-  <!-- ربط ملف البيانات -->
   <script src="data.js"></script>
   
   <script>
@@ -158,7 +239,7 @@
     for (const category in groupedConditions) {
       const catTitle = document.createElement('h2');
       catTitle.className = 'category-title';
-      catTitle.innerHTML = `🌿 ${category}`;
+      catTitle.innerHTML = category;
       categoriesContainer.appendChild(catTitle);
 
       const grid = document.createElement('div');
