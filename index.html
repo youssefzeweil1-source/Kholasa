@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>خلاصة 2.0 | دليلك الذكي للأعشاب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #059669; --primary-light: #10b981; --primary-glow: rgba(16, 185, 129, 0.2);
+      --bg-color: #f8fafc; --surface: #ffffff; --text-main: #0f172a; --text-muted: #64748b;
+      --accent: #f59e0b; --accent-bg: #fffbeb; --border: #e2e8f0; --danger: #ef4444;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --radius: 16px; --transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0f172a; --surface: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
+      --border: #334155; --accent-bg: #451a03; --primary-glow: rgba(16, 185, 129, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; transition: var(--transition); }
+    
+    /* --- الشريط العلوي (أهم تعديل لمنع التغطية) --- */
+    header {
+      position: sticky; top: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border); z-index: 1000; padding: 15px 20px;
+      display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
+      flex-wrap: wrap; gap: 15px;
+    }
+    .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    
+    .header-tools { display: flex; gap: 10px; align-items: center; flex: 1; justify-content: flex-end; flex-wrap: wrap; }
+    .search-box {
+      padding: 10px 15px; border-radius: 50px; border: 1px solid var(--border);
+      background: var(--bg-color); color: var(--text-main); outline: none; width: 100%; max-width: 350px; font-family: inherit;
+      transition: var(--transition);
+    }
+    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-glow); }
+    
+    .icon-btn {
+      background: var(--bg-color); border: 1px solid var(--border); color: var(--text-main);
+      width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .icon-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .icon-btn.active { background: var(--danger); color: white; border-color: var(--danger); }
+    .icon-btn.active-fav { background: #fee2e2; color: var(--danger); border-color: var(--danger); }
+
+    /* --- الشاشات (مساحة أمان عشان المحتوى ميتغطاش) --- */
+    .screen { display: none; padding-top: 30px; padding-bottom: 50px; min-height: 80vh; }
+    .screen.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* --- الفلاتر --- */
+    .filters-container { display: flex; gap: 10px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 8px 20px; border-radius: 50px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text-main); cursor: pointer; font-weight: 700; transition: var(--transition);
+    }
+    .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* --- كروت الأمراض --- */
+    .category-title { font-size: 1.6rem; font-weight: 800; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; }
+    .category-title::before { content: ''; width: 6px; height: 25px; background: var(--primary); border-radius: 10px; }
+    
+    .disease-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .disease-card {
+      background: var(--surface); border-radius: var(--radius); padding: 25px; text-align: center;
+      cursor: pointer; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: var(--transition);
+    }
+    .disease-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+    .disease-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .disease-card h3 { font-size: 1.1rem; font-weight: 700; }
+
+    /* --- صفحة التفاصيل وكارت العشبة --- */
+    .back-btn { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; color: var(--primary); margin-bottom: 30px; transition: var(--transition); }
+    .back-btn:hover { background: var(--primary); color: white; }
+    
+    .herb-card {
+      background: var(--surface); border-radius: var(--radius); padding: 25px; margin-bottom: 30px;
+      box-shadow: var(--shadow-md); border: 1px solid var(--border); position: relative;
+    }
+    .herb-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .herb-info h2 { color: var(--primary); font-size: 1.5rem; }
+    .herb-info .latin { font-style: italic; color: var(--text-muted); font-size: 0.9rem; }
+    
+    .herb-actions { display: flex; gap: 10px; }
+    .action-btn {
+      background: var(--bg-color); border: 1px solid var(--border); width: 35px; height: 35px;
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: var(--transition);
+    }
+    .action-btn.fav.active { background: #fee2e2; color: var(--danger); border-color: var(--danger); }
+    .action-btn.comp.active { background: #e0f2fe; color: #0369a1; border-color: #0369a1; }
+
+    .info-box { padding: 15px; border-radius: 8px; margin-top: 15px; background: var(--bg-color); border-right: 4px solid var(--primary); }
+    .info-box.warning { border-right-color: var(--accent); background: var(--accent-bg); }
+    .info-box h4 { margin-bottom: 5px; font-size: 1rem; }
+    
+    /* --- شريط المقارنة السفلي --- */
+    .compare-bar {
+      position: fixed; bottom: -100px; left: 0; right: 0; background: var(--surface);
+      padding: 15px; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); display: flex; justify-content: center;
+      gap: 20px; transition: var(--transition); z-index: 1000; border-top: 1px solid var(--border);
+    }
+    .compare-bar.show { bottom: 0; }
+    .compare-btn { background: var(--primary); color: white; padding: 10px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; font-family: inherit;}
+
+    /* --- النوافذ المنبثقة (Modal) --- */
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+      display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px);
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: var(--surface); padding: 30px; border-radius: var(--radius); max-width: 800px; width: 90%;
+      max-height: 90vh; overflow-y: auto; position: relative;
+    }
+    .close-modal { position: absolute; top: 15px; left: 15px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); border: none; background: none; }
+
+    /* --- جداول المقارنة --- */
+    .compare-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .compare-table th, .compare-table td { padding: 12px; border: 1px solid var(--border); text-align: right; font-size: 0.95rem;}
+    .compare-table th { background: var(--bg-color); color: var(--primary); }
+
+    /* --- حاسبة الأطفال --- */
+    .calc-input { padding: 10px; border-radius: 8px; border: 1px solid var(--border); width: 100%; margin-bottom: 15px; background: var(--bg-color); color: var(--text-main); font-family: inherit;}
+    .calc-result { background: #ecfdf5; color: #064e3b; padding: 15px; border-radius: 8px; font-weight: bold; display: none;}
+
+    /* --- الموبايل (التعديل السحري عشان البحث ميتغطاش) --- */
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: stretch; padding: 15px; }
+      .header-tools { flex-direction: column; align-items: stretch; width: 100%; gap: 15px; }
+      .search-box { max-width: 100%; order: -1; margin-bottom: 5px; } /* البحث بيبقى فوق */
+      .icon-btn { width: 100%; border-radius: 12px; height: 45px; font-size: 1.3rem; } /* الزراير عريضة ومريحة */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- الشريط العلوي -->
+  <header>
+    <div class="logo" onclick="goHome()"><span>🌿</span> خلاصة 2.0</div>
+    <div class="header-tools">
+      <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن مرض، عشبة، أو عَرَض..." onkeyup="handleSearch()">
+      
+      <!-- الزراير دي هتاخد صف لوحدها في الموبايل -->
+      <div style="display: flex; gap: 10px; width: 100%; justify-content: space-between;">
+        <button class="icon-btn" onclick="togglePregnancy()" id="pregBtn" title="وضع الحمل والرضاعة" style="flex:1;">🤰</button>
+        <button class="icon-btn" onclick="showFavoritesScreen()" title="المفضلة" style="flex:1;">❤️</button>
+        <button class="icon-btn" onclick="toggleDarkMode()" title="الوضع الليلي" style="flex:1;">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- الشاشة الرئيسية -->
+  <div id="home-screen" class="screen active">
+    <div class="container">
+      <div class="filters-container">
+        <button class="filter-btn active" onclick="setFilter('all', this)">كل الأعشاب</button>
+        <button class="filter-btn" onclick="setFilter('egyptian', this)">🇪🇬 أعشاب مصرية</button>
+        <button class="filter-btn" onclick="setFilter('global', this)">🌍 أعشاب عالمية</button>
+        <button class="filter-btn" onclick="showBlends()">🍵 الخلطات الجاهزة</button>
+        <button class="filter-btn" onclick="showCalculator()">🧮 حاسبة الأطفال</button>
+      </div>
+      <div id="categoriesContainer"></div>
+    </div>
+  </div>
+
+  <!-- شاشة التفاصيل -->
+  <div id="disease-screen" class="screen">
+    <div class="container">
+      <button class="back-btn" onclick="goHome()">← رجوع للقائمة</button>
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 id="diseaseTitle" style="font-size: 2.5rem; font-weight: 900;"></h1>
+        <p id="diseaseDesc" style="color: var(--text-muted);"></p>
+      </div>
+      <div id="remediesContainer"></div>
+    </div>
+  </div>
+
+  <!-- شاشة المفضلة -->
+  <div id="favorites-screen" class="screen">
+    <div class="container">
+      <button class="back-btn" onclick="goHome()">← رجوع للرئيسية</button>
+      <h1 style="font-size: 2rem; margin-bottom: 20px;">❤️ قائمة المفضلة</h1>
+      <div id="favoritesContainer"></div>
+    </div>
+  </div>
+
+  <!-- شريط المقارنة السفلي -->
+  <div id="compareBar" class="compare-bar">
+    <span id="compareText" style="font-weight: bold; align-self: center;">تم تحديد عشبتين للمقارنة</span>
+    <button class="compare-btn" onclick="openCompareModal()">قارن الآن ⚖️</button>
+    <button class="icon-btn" onclick="clearCompare()">✖</button>
+  </div>
+
+  <!-- نافذة المقارنة -->
+  <div id="compareModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('compareModal')">✖</button>
+      <h2 style="color: var(--primary); margin-bottom: 20px;">⚖️ مقارنة الأعشاب</h2>
+      <div id="compareTableContainer"></div>
+    </div>
+  </div>
+
+  <!-- نافذة حاسبة الأطفال -->
+  <div id="calcModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('calcModal')">✖</button>
+      <h2 style="color: var(--primary); margin-bottom: 20px;">🧮 حاسبة جرعات الأطفال</h2>
+      <p style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-muted);">أدخل وزن الطفل لحساب الجرعة التقريبية (استشر الطبيب دائماً).</p>
+      <input type="number" id="childWeight" class="calc-input" placeholder="وزن الطفل بالكيلوجرام (مثال: 15)">
+      <button class="compare-btn" style="width: 100%;" onclick="calculateDose()">احسب الجرعة</button>
+      <div id="calcResult" class="calc-result" style="margin-top: 20px;"></div>
+    </div>
+  </div>
+
+  <!-- ربط ملف البيانات -->
+  <script src="data.js"></script>
+  
+  <script>
+    // --- 1. المتغيرات الأساسية ---
+    let currentFilter = 'all';
+    let isPregnant = false;
+    let favorites = JSON.parse(localStorage.getItem('kholasa_favs_v2')) || [];
+    let compareList = [];
+
+    // --- 2. الوضع الليلي ---
+    function toggleDarkMode() {
+      const body = document.body;
+      if(body.getAttribute('data-theme') === 'dark') {
+        body.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+    if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+
+    // --- 3. فلترة الحمل ---
+    function togglePregnancy() {
+      isPregnant = !isPregnant;
+      const btn = document.getElementById('pregBtn');
+      btn.classList.toggle('active', isPregnant);
+      if(isPregnant) {
+        alert("تم تفعيل وضع الحمل. سيتم إخفاء الأعشاب غير الآمنة للحوامل.");
+      }
+      renderHome();
+    }
+
+    // --- 4. البحث الذكي ---
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const container = document.getElementById('categoriesContainer');
+      
+      if(query === '') { renderHome(); return; }
+      
+      container.innerHTML = '';
+      let results = [];
+
+      healthConditions.forEach(cond => {
+        let match = cond.name.toLowerCase().includes(query) || cond.desc.toLowerCase().includes(query);
+        cond.remedies.forEach(rem => {
+          if(rem.name.toLowerCase().includes(query) || rem.how.toLowerCase().includes(query)) match = true;
+        });
+        if(match) results.push(cond);
+      });
+
+      if(results.length === 0) {
+        container.innerHTML = '<h2 style="text-align:center; color:var(--text-muted); margin-top:50px;">مفيش نتايج مطابقة لبحثك 😔</h2>';
+      } else {
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.innerText = 'نتائج البحث';
+        container.appendChild(title);
+        const grid = document.createElement('div');
+        grid.className = 'disease-grid';
+        results.forEach(cond => grid.appendChild(createDiseaseCard(cond)));
+        container.appendChild(grid);
+      }
+    }
+
+    // --- 5. الفلترة (مصري/عالمي) ---
+    function setFilter(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.filters-container .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderHome();
+    }
+
+    // --- 6. بناء الصفحة الرئيسية ---
+    function createDiseaseCard(condition) {
+      const div = document.createElement('div');
+      div.className = 'disease-card';
+      div.innerHTML = `<div class="icon">${condition.icon}</div><h3>${condition.name}</h3>`;
+      div.onclick = () => showDisease(condition);
+      return div;
+    }
+
+    function renderHome() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = '';
+      document.getElementById('searchInput').value = '';
+      
+      const grouped = {};
+      healthConditions.forEach(cond => {
+        const filteredRemedies = cond.remedies.filter(rem => {
+          if (currentFilter === 'egyptian') return rem.isEgyptian === true;
+          if (currentFilter === 'global') return rem.isEgyptian === false;
+          if (isPregnant && !rem.isSafeForPregnancy) return false;
+          return true;
+        });
+        
+        if (filteredRemedies.length > 0) {
+          if (!grouped[cond.category]) grouped[cond.category] = [];
+          grouped[cond.category].push({...cond, remedies: filteredRemedies});
+        }
+      });
+
+      for (const cat in grouped) {
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.innerText = cat;
+        container.appendChild(title);
+        const grid = document.createElement('div');
+        grid.className = 'disease-grid';
+        grouped[cat].forEach(cond => grid.appendChild(createDiseaseCard(cond)));
+        container.appendChild(grid);
+      }
+    }
+
+    // --- 7. عرض تفاصيل المرض ---
+    function showDisease(condition) {
+      document.getElementById('diseaseTitle').innerText = condition.name;
+      document.getElementById('diseaseDesc').innerText = condition.desc;
+      
+      const container = document.getElementById('remediesContainer');
+      container.innerHTML = '';
+      
+      condition.remedies.forEach((remedy) => {
+        if (isPregnant && !remedy.isSafeForPregnancy) return;
+
+        const isFav = favorites.includes(remedy.name);
+        const isComp = compareList.includes(remedy.name);
+        
+        const card = document.createElement('div');
+        card.className = 'herb-card';
+        card.innerHTML = `
+          <div class="herb-header">
+            <div class="herb-info">
+              <h2>${remedy.name}</h2>
+              <span class="latin">${remedy.latin}</span>
+            </div>
+            <div class="herb-actions">
+              <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFav('${remedy.name}', this)">❤️</button>
+              <button class="action-btn comp ${isComp ? 'active' : ''}" onclick="toggleCompare('${remedy.name}', this)">⚖️</button>
+            </div>
+          </div>
+          
+          <p style="margin-bottom: 15px;"><strong>💡 إزاي بيعالج؟</strong> ${remedy.how}</p>
+          
+          <div class="info-box">
+            <h4>☕ الجرعة والاستخدام</h4>
+            <p>${remedy.dosage}</p>
+          </div>
+          
+          <div class="info-box">
+            <h4>⏳ مدة العلاج المتوقعة</h4>
+            <p>${remedy.duration}</p>
+          </div>
+
+          <div class="info-box" style="border-right-color: #8b5cf6; background: #f5f3ff; color: #4c1d95;">
+            <h4>${remedy.plantingSeason || '🌱 موسم الزراعة غير محدد'}</h4>
+            <p><strong>🌍 متوفرة في:</strong> ${remedy.location.world} | <strong>🇪🇬 مصر:</strong> ${remedy.location.egypt}</p>
+            <p><strong>🛒 هتلاقيها فين:</strong> ${remedy.location.where}</p>
+          </div>
+          
+          <div class="info-box warning">
+            <h4>⚠️ تحذيرات مهمة</h4>
+            <ul>${remedy.warnings.map(w => `<li>${w}</li>`).join('')}</ul>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      if(container.innerHTML === '') {
+        container.innerHTML = '<h2 style="text-align:center; color:var(--danger); margin-top:50px;">لا توجد أعشاب آمنة للحوامل في هذا القسم.</h2>';
+      }
+
+      document.getElementById('home-screen').classList.remove('active');
+      document.getElementById('favorites-screen').classList.remove('active');
+      document.getElementById('disease-screen').classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    // --- 8. المفضلة ---
+    function toggleFav(name, btn) {
+      if(favorites.includes(name)) {
+        favorites = favorites.filter(f => f !== name);
+        btn.classList.remove('active');
+      } else {
+        favorites.push(name);
+        btn.classList.add('active');
+      }
+      localStorage.setItem('kholasa_favs_v2', JSON.stringify(favorites));
+    }
+
+    function showFavoritesScreen() {
+      const container = document.getElementById('favoritesContainer');
+      container.innerHTML = '';
+      
+      if(favorites.length === 0) {
+        container.innerHTML = '<h3 style="color: var(--text-muted); text-align: center; margin-top: 50px;">مفيش أعشاب في المفضلة لسه. اضغط على القلب ❤️ جوه أي عشبة عشان تحفظها هنا.</h3>';
+      } else {
+        healthConditions.forEach(cond => {
+          cond.remedies.forEach(rem => {
+            if(favorites.includes(rem.name)) {
+              const card = document.createElement('div');
+              card.className = 'herb-card';
+              card.style.display = 'flex';
+              card.style.justifyContent = 'space-between';
+              card.style.alignItems = 'center';
+              card.innerHTML = `<div><h2>${rem.name}</h2><p style="font-size:0.9rem; color:var(--text-muted);">${rem.how}</p></div><button class="action-btn fav active" onclick="toggleFav('${rem.name}', this); showFavoritesScreen();">❤️</button>`;
+              container.appendChild(card);
+            }
+          });
+        });
+      }
+      
+      document.getElementById('home-screen').classList.remove('active');
+      document.getElementById('disease-screen').classList.remove('active');
+      document.getElementById('favorites-screen').classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    // --- 9. المقارنة ---
+    function toggleCompare(name, btn) {
+      if(compareList.includes(name)) {
+        compareList = compareList.filter(n => n !== name);
+        btn.classList.remove('active');
+      } else {
+        if(compareList.length >= 2) { alert('يمكنك مقارنة عشبتين فقط في نفس الوقت.'); return; }
+        compareList.push(name);
+        btn.classList.add('active');
+      }
+      
+      const bar = document.getElementById('compareBar');
+      if(compareList.length > 0) bar.classList.add('show');
+      else bar.classList.remove('show');
+    }
+
+    function clearCompare() {
+      compareList = [];
+      document.querySelectorAll('.action-btn.comp').forEach(b => b.classList.remove('active'));
+      document.getElementById('compareBar').classList.remove('show');
+    }
+
+    function openCompareModal() {
+      if(compareList.length < 2) { alert('اختار عشبتين الأول.'); return; }
+      
+      let herb1, herb2;
+      healthConditions.forEach(cond => {
+        cond.remedies.forEach(rem => {
+          if(rem.name === compareList[0]) herb1 = rem;
+          if(rem.name === compareList[1]) herb2 = rem;
+        });
+      });
+
+      const table = `
+        <table class="compare-table">
+          <tr><th>وجه المقارنة</th><th>${herb1.name}</th><th>${herb2.name}</th></tr>
+          <tr><td>الاستخدام</td><td>${herb1.how}</td><td>${herb2.how}</td></tr>
+          <tr><td>الجرعة</td><td>${herb1.dosage}</td><td>${herb2.dosage}</td></tr>
+          <tr><td>مدة المفعول</td><td>${herb1.duration}</td><td>${herb2.duration}</td></tr>
+          <tr><td>التحذيرات</td><td>${herb1.warnings.join(', ')}</td><td>${herb2.warnings.join(', ')}</td></tr>
+        </table>
+      `;
+      document.getElementById('compareTableContainer').innerHTML = table;
+      document.getElementById('compareModal').classList.add('show');
+    }
+
+    // --- 10. حاسبة الأطفال والخلطات ---
+    function showCalculator() {
+      document.getElementById('calcModal').classList.add('show');
+    }
+
+    function calculateDose() {
+      const weight = parseFloat(document.getElementById('childWeight').value);
+      if(!weight || weight <= 0) return alert('أدخل وزن صحيح');
+      
+      const adultDoseMultiplier = weight / 70; 
+      const resultBox = document.getElementById('calcResult');
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = `
+        <p>⚠️ <strong>تنبيه هام:</strong> الحسابات دي تقريبية جداً بناءً على الوزن.</p>
+        <p style="margin-top:10px;">الجرعة المناسبة لطفل وزنه ${weight} كجم هي تقريباً <strong>${(adultDoseMultiplier * 100).toFixed(0)}%</strong> من جرعة الكبار.</p>
+        <p style="margin-top:10px; color:var(--danger);">ممنوع إعطاء أي عشب لطفل أقل من سنتين إلا باستشارة طبيب.</p>
+      `;
+    }
+
+    function showBlends() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = '<h2 class="category-title">🍵 خلطات جاهزة ومجربة</h2>';
+      
+      const grid = document.createElement('div');
+      grid.className = 'disease-grid';
+      grid.style.gridTemplateColumns = '1fr';
+      
+      blends.forEach(blend => {
+        const card = document.createElement('div');
+        card.className = 'herb-card';
+        card.innerHTML = `
+          <h2 style="color:var(--primary); margin-bottom:10px;">${blend.icon} ${blend.name}</h2>
+          <p style="margin: 10px 0;"><strong>المكونات:</strong> ${blend.ingredients}</p>
+          <p style="margin-bottom: 10px;">${blend.desc}</p>
+          <div class="info-box"><h4>طريقة التحضير</h4><p>${blend.howTo}</p></div>
+          <div class="info-box warning"><h4>تحذيرات</h4><p>${blend.warnings.join(', ')}</p></div>
+        `;
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+    }
+
+    // --- التهيئة ---
+    function goHome() {
+      document.getElementById('home-screen').classList.add('active');
+      document.getElementById('disease-screen').classList.remove('active');
+      document.getElementById('favorites-screen').classList.remove('active');
+      window.scrollTo(0,0);
+      renderHome();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    // بدء التشغيل
+    renderHome();
+
+  </script>
+</body>
+</html>
