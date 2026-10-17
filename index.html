@@ -40,6 +40,7 @@ header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid v
 .herb-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px;gap:10px}
 .herb-title{display:flex;align-items:center;gap:14px}
 .herb-img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-light)}
+.herb-placeholder{display:flex;align-items:center;justify-content:center;background:var(--primary-glow);font-size:1.8rem;flex:none}
 .herb-info h2{color:var(--primary);font-size:1.5rem}
 .latin{font-style:italic;color:var(--text-muted);font-size:.9rem}
 .herb-actions{display:flex;gap:10px}
@@ -222,9 +223,15 @@ body.intro-lock { overflow: hidden; }
 <script>
 let filter='all',isPregnant=false,compareList=[];
 const FAV_KEY='kholasa_favs_v3';
-let favorites=JSON.parse(localStorage.getItem(FAV_KEY)||'[]');
+let favorites=[];
+try{favorites=JSON.parse(localStorage.getItem(FAV_KEY)||'[]');if(!Array.isArray(favorites))favorites=[]}catch{favorites=[]}
 const $=id=>document.getElementById(id);
 const showScreen=id=>{['home-screen','disease-screen','favorites-screen'].forEach(s=>$(s).classList.toggle('active',s===id));window.scrollTo(0,0)};
+if(typeof GENERAL_DISCLAIMER==='undefined'||!Array.isArray(HEALTH_CONDITIONS)||typeof HERBS!=='object'){
+  $('disclaimer').textContent='⚠️ تعذر تحميل بيانات الموقع. حدّث الصفحة أو جرّب فتحها مرة أخرى.';
+  $('categoriesContainer').innerHTML='<h2 style="text-align:center;color:var(--danger);margin-top:50px">البيانات غير متاحة حاليًا.</h2>';
+  throw new Error('Kholasa data failed to load');
+}
 $('disclaimer').textContent='⚠️ '+GENERAL_DISCLAIMER;
 
 function toggleDarkMode(){
@@ -289,9 +296,10 @@ function setFilter(type,btn){
 function herbCard(r,cid){
   const fav=favorites.includes(r.herbId),comp=compareList.some(x=>x.h===r.herbId&&x.c===cid),p=PREGNANCY[r.pregnancy];
   const plant=r.planting?`🌱 موعد الزراعة: ${r.planting}`:'🌱 مش بتتزرع تجارياً في مصر';
+  const image=r.img?`<img class="herb-img" src="${r.img}" alt="${r.name}">`:'<div class="herb-img herb-placeholder" aria-hidden="true">🌿</div>';
   return `<div class="herb-card">
     <div class="herb-header">
-      <div class="herb-title"><img class="herb-img" src="${r.img}" alt="${r.name}" onerror="this.style.display='none'">
+      <div class="herb-title">${image}
         <div class="herb-info"><h2>${r.name}</h2><span class="latin">${r.latin}</span></div></div>
       <div class="herb-actions">
         <button class="action-btn fav ${fav?'active':''}" onclick="toggleFav('${r.herbId}',this)">❤️</button>
@@ -333,7 +341,7 @@ function showFavoritesScreen(){
     const h=HERBS[id];
     const rem=HEALTH_CONDITIONS.flatMap(c=>c.remedies).find(r=>r.herb===id);
     return `<div class="herb-card" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <div class="herb-title"><img class="herb-img" src="${herbImage(id)}" alt="" onerror="this.style.display='none'">
+      <div class="herb-title"><div class="herb-img herb-placeholder" aria-hidden="true">🌿</div>
       <div class="herb-info"><h2>${h.name}</h2><p style="font-size:.9rem;color:var(--text-muted)">${rem?rem.how:''}</p></div></div>
       <button class="action-btn fav active" onclick="toggleFav('${id}',this);showFavoritesScreen()">❤️</button></div>`;
   }).join('');
