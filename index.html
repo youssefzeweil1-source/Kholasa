@@ -30,12 +30,14 @@ header{position:sticky;top:0;background:var(--surface);border-bottom:1px solid v
 .category-title{font-size:1.6rem;font-weight:800;margin:40px 0 20px;display:flex;align-items:center;gap:10px}
 .category-title::before{content:'';width:6px;height:25px;background:var(--primary);border-radius:10px}
 .disease-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-.disease-card{background:var(--surface);border-radius:var(--radius);padding:25px;text-align:center;cursor:pointer;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:var(--transition)}
+.disease-card{background:var(--surface);border-radius:var(--radius);padding:18px;text-align:center;cursor:pointer;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:var(--transition)}
 .disease-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:var(--primary)}
 .disease-card .icon{font-size:2.5rem;margin-bottom:10px}
+.disease-card-img{width:100%;aspect-ratio:1;border-radius:12px;object-fit:cover;margin-bottom:10px;border:1px solid var(--border)}
 .disease-card h3{font-size:1.1rem;font-weight:700}
 .back-btn{background:var(--surface);border:1px solid var(--border);padding:10px 20px;border-radius:50px;cursor:pointer;font-weight:700;color:var(--primary);margin-bottom:30px;transition:var(--transition)}
 .back-btn:hover{background:var(--primary);color:#fff}
+.disease-image{width:min(100%,360px);aspect-ratio:1;object-fit:cover;border-radius:18px;display:block;margin:0 auto 18px;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
 .herb-card{background:var(--surface);border-radius:var(--radius);padding:25px;margin-bottom:30px;box-shadow:var(--shadow-md);border:1px solid var(--border)}
 .herb-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px;gap:10px}
 .herb-title{display:flex;align-items:center;gap:14px}
@@ -185,6 +187,7 @@ body.intro-lock { overflow: hidden; }
 <div id="disease-screen" class="screen"><div class="container">
   <button class="back-btn" onclick="goHome()">← رجوع للقائمة</button>
   <div style="text-align:center;margin-bottom:30px">
+    <div id="diseaseImageWrap"></div>
     <h1 id="diseaseTitle" style="font-size:2.5rem;font-weight:900"></h1>
     <p id="diseaseDesc" style="color:var(--text-muted)"></p>
   </div>
@@ -227,6 +230,7 @@ let favorites=[];
 try{favorites=JSON.parse(localStorage.getItem(FAV_KEY)||'[]');if(!Array.isArray(favorites))favorites=[]}catch{favorites=[]}
 const $=id=>document.getElementById(id);
 const showScreen=id=>{['home-screen','disease-screen','favorites-screen'].forEach(s=>$(s).classList.toggle('active',s===id));window.scrollTo(0,0)};
+const CONDITION_IMAGES={cold:'images/diseases/cold.jpg',cough:'images/diseases/cough.jpg',asthma:'images/diseases/asthma.jpg',digestive:'images/diseases/digestive.jpg',constipation:'images/diseases/constipation.jpg',immunity:'images/diseases/immunity.jpg',blood_pressure:'images/diseases/blood_pressure.jpg',diabetes:'images/diseases/diabetes.jpg',anxiety:'images/diseases/anxiety.jpg',insomnia:'images/diseases/insomnia.jpg',memory:'images/diseases/memory.jpg',toothache:'images/diseases/toothache.jpg',inflammation:'images/diseases/inflammation.jpg',anti_aging:'images/diseases/anti_aging.jpg',osteoporosis:'images/diseases/osteoporosis.jpg',colic:'images/diseases/colic.jpg',migraine:'images/diseases/migraine.jpg',menstrual:'images/diseases/menstrual.jpg',eye_strain:'images/diseases/eye_strain.jpg',acne:'images/diseases/acne.jpg',eczema:'images/diseases/eczema.jpg',hair_loss:'images/diseases/hair_loss.jpg',dandruff:'images/diseases/dandruff.jpg',gray_hair:'images/diseases/gray_hair.jpg'};
 if(typeof GENERAL_DISCLAIMER==='undefined'||!Array.isArray(HEALTH_CONDITIONS)||typeof HERBS!=='object'){
   $('disclaimer').textContent='⚠️ تعذر تحميل بيانات الموقع. حدّث الصفحة أو جرّب فتحها مرة أخرى.';
   $('categoriesContainer').innerHTML='<h2 style="text-align:center;color:var(--danger);margin-top:50px">البيانات غير متاحة حاليًا.</h2>';
@@ -254,7 +258,7 @@ const remedyList=cid=>getRemedies(cid,{egyptianOnly:filter==='egyptian',pregnanc
 
 function createDiseaseCard(c){
   const d=document.createElement('div');d.className='disease-card';
-  d.innerHTML=`<div class="icon">${c.icon}</div><h3>${c.name}</h3>`;
+  d.innerHTML=`<img class="disease-card-img" src="${CONDITION_IMAGES[c.id]||''}" alt="${c.name}" loading="lazy"><div class="icon">${c.icon}</div><h3>${c.name}</h3>`;
   d.onclick=()=>showDisease(c.id);return d;
 }
 function fillGrid(container,title,list){
@@ -319,6 +323,7 @@ function herbCard(r,cid){
 
 function showDisease(cid){
   const c=HEALTH_CONDITIONS.find(x=>x.id===cid);
+  $('diseaseImageWrap').innerHTML=CONDITION_IMAGES[cid]?`<img class="disease-image" src="${CONDITION_IMAGES[cid]}" alt="${c.name}">`:'';
   $('diseaseTitle').textContent=c.name;$('diseaseDesc').textContent=c.desc;
   const box=$('remediesContainer');let html='';
   if(c.seeDoctor)html+=`<div class="info-box danger"><h4>🩺 امتى تروح للدكتور؟</h4><p>${c.seeDoctor}</p></div>`;
@@ -340,8 +345,9 @@ function showFavoritesScreen(){
   else box.innerHTML=favorites.filter(id=>HERBS[id]).map(id=>{
     const h=HERBS[id];
     const rem=HEALTH_CONDITIONS.flatMap(c=>c.remedies).find(r=>r.herb===id);
+    const image=herbImage(id);
     return `<div class="herb-card" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <div class="herb-title"><div class="herb-img herb-placeholder" aria-hidden="true">🌿</div>
+      <div class="herb-title"><img class="herb-img" src="${image}" alt="${h.name}" loading="lazy">
       <div class="herb-info"><h2>${h.name}</h2><p style="font-size:.9rem;color:var(--text-muted)">${rem?rem.how:''}</p></div></div>
       <button class="action-btn fav active" onclick="toggleFav('${id}',this);showFavoritesScreen()">❤️</button></div>`;
   }).join('');
